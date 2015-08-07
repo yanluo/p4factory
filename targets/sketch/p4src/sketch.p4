@@ -4,15 +4,14 @@
 #include "includes/headers.p4"
 #include "includes/parser.p4"
 
-/*Counter table metadata for rows, columns and hash value */
+/*Counter table metadata */
 header_type counter_table_metadata_t {
   fields{     
-      //bucket_index : 10; //w=544 
-      //depth_index : 2;  // d=3
       h_v : 16;
    
   }
 }
+
 
 
 metadata counter_table_metadata_t counter_table_metadata1;
@@ -21,25 +20,24 @@ metadata counter_table_metadata_t counter_table_metadata3;
 
 
 /* 3 ROWS OF COUNTERS THAT IS DEPTH(d)=3 */
-counter c1{
-    type : packets;
+register r1 {
+    width : 10;
     static : table_data_array1;
     instance_count : 544;   //w=544 //single array of 544 entries   
-    saturating ;
 }
 
-counter c2{
-    type : packets;
+register r2 {
+    width : 10;
     static : table_data_array2;
     instance_count : 544;   //w=544 //single array of 544 entries   
-    saturating ;
+   
 }
 
-counter c3{
-    type : packets;
+register r3 {
+    width : 10;
     static : table_data_array3;
     instance_count : 544;   //w=544 //single array of 544 entries   
-    saturating ;
+   
 }
 
 
@@ -85,28 +83,24 @@ action no_op() {
    
 }
 
+
 action inc_counter1() {
-	//modify_field(counter_table_metadata1.bucket_index, bucket_index);
-	//modify_field(counter_table_metadata1.depth_index, depth_index);
-       /*value from hash value metadata is copied to counter table metadata */
-	modify_field(counter_table_metadata1.h_v, hashvalue1.hash_value1);
-        count(c1,1); //update counter
+	register_read(counter_table_metadata1.h_v, r1, hashvalue1.hash_value1);
+	add_to_field(counter_table_metadata1.h_v, 0x01); //adding 1 to metadata field
+	register_write(r1, hashvalue1.hash_value1, counter_table_metadata1.h_v);//writing value from metadata field to register with location of hash value
+ 
 }
 
 action inc_counter2() {
-	//modify_field(counter_table_metadata2.bucket_index, bucket_index);
-	//modify_field(counter_table_metadata2.depth_index, depth_index);
- 	/*value from hash value metadata is copied to counter table metadata */
-	modify_field(counter_table_metadata2.h_v, hashvalue2.hash_value2);
-        count(c2,2); //update counter
+	register_read(counter_table_metadata2.h_v, r2, hashvalue2.hash_value2);
+	add_to_field(counter_table_metadata2.h_v, 0x01);
+	register_write(r2, hashvalue2.hash_value2, counter_table_metadata2.h_v);
 }
 
 action inc_counter3() {
-	//modify_field(counter_table_metadata3.bucket_index, bucket_index);
-	//modify_field(counter_table_metadata3.depth_index, depth_index);
- 	/*value from hash value metadata is copied to counter table metadata */
-	modify_field(counter_table_metadata3.h_v, hashvalue3.hash_value3);
-        count(c3,3); //update counter
+	register_read(counter_table_metadata3.h_v, r3, hashvalue3.hash_value3);
+	add_to_field(counter_table_metadata3.h_v, 0x01);
+	register_write(r3, hashvalue3.hash_value3, counter_table_metadata3.h_v);
 }
 
 
@@ -169,19 +163,9 @@ table send_frame {
 
 control ingress {
     apply(ipv4_lpm);
-    apply(table_data_array1);
-    apply(table_data_array2); 
-    apply(table_data_array3);
-    
-   // if(counter_table_metadata1.h_v == hashvalue1.hash_value1){
-   //   count(c1,1); //update counter
-    //  }
-   // if(counter_table_metadata2.h_v == hashvalue2.hash_value2){
-   //   count(c2,2); //update counter
-    //  }
-   // if(counter_table_metadata3.h_v == hashvalue3.hash_value3){
-    // count(c3,3); //update counter
-   //   }
+     apply(table_data_array1);
+     apply(table_data_array2);
+     apply(table_data_array3);
     apply(forward);
 }
 
