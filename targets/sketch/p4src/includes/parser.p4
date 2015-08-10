@@ -42,7 +42,7 @@ field_list_calculation ipv4_hash1 {
         ipv4_checksum_list;
     }
     algorithm : csum16; //1st algo
-    output_width : 16;
+    output_width : 32;
 }
 
 /*2nd hash value calculation */
@@ -51,7 +51,7 @@ field_list_calculation ipv4_hash2 {
         ipv4_checksum_list;
     }
     algorithm : crc16;  //2nd algo
-    output_width : 16;
+    output_width : 32;
 }
 
 /*3rd hash value calculation */
@@ -60,7 +60,7 @@ field_list_calculation ipv4_hash3 {
         ipv4_checksum_list;
     }
     algorithm : crc32; //3rd algo
-    output_width : 16;
+    output_width : 32;
 }
 
 metadata hashvalue1_t hashvalue1;

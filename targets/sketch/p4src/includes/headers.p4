@@ -32,21 +32,21 @@ header_type ipv4_t {
 /*Metadata for 1st hash value*/  
 header_type hashvalue1_t {
     fields {
-        hash_value1 : 16;
+        hash_value1 : 32;
     }
 }
 
 /*Metadata for 2nd hash value */ 
 header_type hashvalue2_t {
     fields {
-        hash_value2 : 16;
+        hash_value2 : 32;
     }
 }
 
 /*Metadata for 3rd hash value */ 
 header_type hashvalue3_t {
     fields {
-        hash_value3 : 16;
+        hash_value3 : 32;
     }
 }
 
