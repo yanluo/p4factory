@@ -23,6 +23,14 @@ import socket
 import struct
 import sys
 
+#from p4_pd_rpc.ttypes import *
+#sys.path.insert(0, '/home/swaroop/p4/p4factory/targets/sketch/of-tests/pd_thrift/p4_pd_rpc/ttypes')
+#sys.path.insert(0, '/home/swaroop/p4/p4factory/targets/sketch/of-tests/pd_thrift/res_pd_rpc/ttypes')
+#sys.path.insert(0, '/home/swaroop/p4/p4factory/targets/sketch/of-tests/pd_thrift/mc_pd_rpc/mc')
+#sys.path.insert(0, '/home/swaroop/p4/p4factory/targets/sketch/of-tests/pd_thrift/conn_mgr_pd_rpc/conn_mgr')
+#from res_pd_rpc.ttypes import *
+#import mc_pd_rpc.mc as mc_module
+#import conn_mgr_pd_rpc.conn_mgr as conn_mgr_module
 
 class ThriftClient(object):
   MATCH_SPEC_T = "_match_spec_t"
@@ -45,8 +53,7 @@ class ThriftClient(object):
   
     self.p4_client_module = importlib.import_module(".".join(["p4_pd_rpc", p4_name]))
     self.mc_client_module = importlib.import_module(".".join(["mc_pd_rpc", "mc"]))
-    self.conn_mgr_client_module = importlib.import_module(".".join(["conn_mgr_pd_rpc",
-"conn_mgr"]))
+    self.conn_mgr_client_module = importlib.import_module(".".join(["conn_mgr_pd_rpc","conn_mgr"]))
 
     self._p4_name = p4_name
 
@@ -54,6 +61,7 @@ class ThriftClient(object):
 
     self.setup(hostname, port)
     self._session_handle = self._conn_mgr.client_init(16)
+    
     from res_pd_rpc.ttypes import DevTarget_t
     self._dev_target = DevTarget_t(0, self._utils.hex_to_i16(0xFFFF))
 

@@ -18,6 +18,7 @@ from mininet.net import Mininet
 from mininet.topo import Topo
 from mininet.log import setLogLevel, info
 from mininet.cli import CLI
+import sys
 
 from p4_mininet import P4Switch, P4Host
 
@@ -30,7 +31,7 @@ parser.add_argument('--behavioral-exe', help='Path to behavioral executable',
 parser.add_argument('--thrift-port', help='Thrift server port for table updates',
                     type=int, action="store", default=22222)
 parser.add_argument('--num-hosts', help='Number of hosts to connect to switch',
-                    type=int, action="store", default=2)
+                    type=int, action="store", default=3)
 
 args = parser.parse_args()
 
@@ -62,7 +63,8 @@ def main():
     net = Mininet(topo = topo,
                   host = P4Host,
                   switch = P4Switch,
-                  controller = None )
+                  controller = None, 
+                  )
     net.start()
 
 
@@ -83,9 +85,11 @@ def main():
 
     print "Ready !"
 
-    CLI( net )
+    CLI(net, script="/home/swaroop/p4/p4factory/mininet/swaroop2.sh")
     net.stop()
 
+
+
 if __name__ == '__main__':
-    setLogLevel( 'info' )
+    setLogLevel( 'debug' )
     main()

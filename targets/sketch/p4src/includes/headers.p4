@@ -28,25 +28,31 @@ header_type ipv4_t {
     }
 }
 
-
-/*Metadata for 1st hash value*/  
-header_type hashvalue1_t {
+header_type intrinsic_metadata_t {
     fields {
-        hash_value1 : 32;
+        mcast_grp : 4;
+        egress_rid : 4;
+        mcast_hash : 16;
+        lf_field_list: 32;
     }
 }
 
-/*Metadata for 2nd hash value */ 
-header_type hashvalue2_t {
+header_type cpu_header_t {
     fields {
-        hash_value2 : 32;
+        device: 8;
+        reason: 8;
+        hash1 : 16;
+        hash2 : 16;
+        hash3 : 16;
+        count1 : 8; 
+        count2 : 8; 
+        count3 : 8; 
+        minimum : 8;
+        value : 8;
     }
 }
 
-/*Metadata for 3rd hash value */ 
-header_type hashvalue3_t {
-    fields {
-        hash_value3 : 32;
-    }
-}
+header cpu_header_t cpu_header;
+metadata intrinsic_metadata_t intrinsic_metadata;
+
 
